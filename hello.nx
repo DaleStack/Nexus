@@ -1,5 +1,13 @@
 module Hello {
-  view render() {
-    <h1>Hello, Nexus!</h1>
+  state name: string = "Casey"
+  state age: int = 19
+
+  template {
+    <h1>Hello, {name}!</h1>
+    <input type="text" bind={name} />
   }
+
+  action login
+  action logout
+  action like
 }
