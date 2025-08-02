@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"nexus/internal/parser"
 )
 
 func main() {
@@ -14,27 +16,21 @@ func main() {
 
 	filename := os.Args[1]
 
+	// Optional: centralize this check in parser for reusability
 	if !strings.HasSuffix(filename, ".nx") {
-		fmt.Printf("🚫 Invalid file extension: expected .nx, got %s\n", filename)
+		fmt.Printf("🚫 Invalid file extension: %s\n", filename)
 		return
 	}
 
-	content, err := os.ReadFile(filename)
+	module, err := parser.ParseFile(filename)
 	if err != nil {
-		fmt.Printf("Error reading file: %v\n", err)
+		fmt.Printf("❌ Error parsing file: %v\n", err)
 		return
 	}
 
-	source := string(content)
-	fmt.Println("🔹 Nexus source code:")
-	fmt.Println(source)
-
-	lines := strings.Split(source, "\n")
-	firstLine := strings.TrimSpace(lines[0])
-
-	if strings.HasPrefix(firstLine, "module ") {
-		fmt.Println("✅ Valid Nexus module syntax")
-	} else {
-		fmt.Println("⚠️ Missing `module` declaration at the top")
-	}
+	// 💡 Summary Output
+	fmt.Println("🔍 Nexus Module Summary")
+	fmt.Printf("📦 Name: %s\n", module.Name)
+	fmt.Printf("👁️ View Blocks: %d\n", module.ViewCount)
+	fmt.Printf("🎯 Actions: %v\n", module.Actions)
 }
