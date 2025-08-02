@@ -8,11 +8,16 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: nexus <filename>")
+		fmt.Println("Usage: nexus <filename.nx>")
 		return
 	}
 
 	filename := os.Args[1]
+
+	if !strings.HasSuffix(filename, ".nx") {
+		fmt.Printf("🚫 Invalid file extension: expected .nx, got %s\n", filename)
+		return
+	}
 
 	content, err := os.ReadFile(filename)
 	if err != nil {
@@ -24,7 +29,6 @@ func main() {
 	fmt.Println("🔹 Nexus source code:")
 	fmt.Println(source)
 
-	// Check if file starts with `module`
 	lines := strings.Split(source, "\n")
 	firstLine := strings.TrimSpace(lines[0])
 
